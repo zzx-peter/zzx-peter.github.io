@@ -1,0 +1,142 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const read = (file) => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
+const profile = read('data/profile.json');
+const papers = read('data/publications.json');
+const escape = (value = '') => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+const icon = (kind) => {
+  const paths = {
+    email: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m3 6 9 7 9-7"/>',
+    scholar: '<path d="m2 9 10-6 10 6-10 6Z"/><path d="M6 12v6c4 3 8 3 12 0v-6M22 9v8"/>',
+    github: '<path d="M9 20c-5 1-5-3-7-3m14 6v-4a3.5 3.5 0 0 0-1-3c3-.4 6-1.4 6-7a5 5 0 0 0-1.5-3.5A4.6 4.6 0 0 0 19.4 2S18.2 1.6 16 3a13 13 0 0 0-8 0C5.8 1.6 4.6 2 4.6 2a4.6 4.6 0 0 0-.1 3.5A5 5 0 0 0 3 9c0 5.6 3 6.6 6 7a3.5 3.5 0 0 0-1 3v4"/>',
+    arrow: '<path d="M7 17 17 7M7 7h10v10"/>',
+    check: '<path d="m5 12 4 4L19 6"/>',
+    chevron: '<path d="m6 9 6 6 6-6"/>',
+    pdf: '<path d="M14 2H5a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/>'
+  };
+  return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${paths[kind] || paths.arrow}</svg>`;
+};
+const external = (url, label, kind = 'arrow') => `<a href="${escape(url)}" target="_blank" rel="noopener noreferrer">${kind ? icon(kind) : ''}${escape(label)}</a>`;
+const paperIds = new Set();
+for (const paper of papers) {
+  if (paperIds.has(paper.id)) throw new Error(`Duplicate publication: ${paper.id}`);
+  paperIds.add(paper.id);
+  if ('pdf' in paper) throw new Error(`Private PDF paths must not be included in public data: ${paper.id}`);
+  if (paper.figure && (!paper.figure.startsWith('assets/figures/') || !/\.(webp|png|jpe?g)$/i.test(paper.figure) || !fs.existsSync(path.join(root, paper.figure)))) throw new Error(`Invalid thumbnail: ${paper.id}`);
+  for (const key of ['arxiv', 'preprint', 'project', 'code']) {
+    if (!paper[key]) continue;
+    const url = new URL(paper[key]);
+    const allowed = ['arxiv.org', 'github.com', 'zenodo.org', 'papers.ssrn.com'].includes(url.hostname) || (url.hostname === 'doi.org' && url.pathname.startsWith('/10.5281/zenodo.'));
+    if (url.protocol !== 'https:' || !allowed) throw new Error(`Only public research platforms may be linked: ${paper.id}/${key}`);
+  }
+  if (!paper.arxiv && !paper.preprint && (paper.project || paper.code)) throw new Error(`Unpublished papers must not have links: ${paper.id}`);
+  if (paper.date && !/^\d{4}-(0[1-9]|1[0-2])$/.test(paper.date)) throw new Error(`Invalid date: ${paper.id}`);
+  if (!paper.date && paper.dateKind !== 'accepted') throw new Error(`Missing date: ${paper.id}`);
+  if (!paper.title || !Array.isArray(paper.authors)) throw new Error(`Missing metadata: ${paper.id}`);
+  if (!paper.authors.length && !paper.authorNote) throw new Error(`Unexplained missing authors: ${paper.id}`);
+}
+// A pending acceptance date has no invented month. Confirm it in publications.json.
+const dateKindPriority = { accepted: 0, arxiv: 1, preprint: 1, completed: 2 };
+papers.sort((a, b) => (b.date || '').localeCompare(a.date || '') || dateKindPriority[a.dateKind] - dateKindPriority[b.dateKind] || a.title.localeCompare(b.title));
+const authorHTML = (author) => {
+  const name = escape(typeof author === 'string' ? author : author.name);
+  const formatted = name === escape(profile.name) ? `<strong>${name}</strong>` : name;
+  return formatted + (author.equal ? '<sup>*</sup>' : '');
+};
+const paperHTML = (paper) => {
+  const isAccepted = paper.dateKind === 'accepted';
+  const date = paper.date ? `<time datetime="${paper.date}">${paper.date.replace('-', '.')}</time>` : '<span class="pending-date">Date pending</span>';
+  const kind = { accepted: 'Accepted', arxiv: 'arXiv', preprint: 'First posted', completed: 'Completed' }[paper.dateKind];
+  const links = [];
+  if (paper.arxiv) links.push(external(paper.arxiv, 'arXiv', ''));
+  if (paper.preprint) links.push(external(paper.preprint, 'Preprint', ''));
+  if (paper.project) links.push(external(paper.project, 'GitHub', ''));
+  if (paper.code) links.push(external(paper.code, 'Code', ''));
+  let authors = paper.authors.length ? `<p class="authors">${paper.authors.map(authorHTML).join(', ')}</p>` : '';
+  if (paper.authors.length > 18) {
+    const featuredAuthor = paper.authors.find(a => a.name === profile.name);
+    const excerpt = [...paper.authors.slice(0, 2).map(authorHTML), '…', ...(featuredAuthor ? [authorHTML(featuredAuthor)] : []), 'et al.'].join(', ');
+    authors = `<details class="author-details"><summary><span class="authors">${excerpt}</span><span class="author-toggle"><span class="more">All ${paper.authors.length} authors</span><span class="less">Fewer authors</span>${icon('chevron')}</span></summary>${authors}</details>`;
+  }
+  return `<article class="publication${isAccepted ? ' is-accepted' : ''}" id="${escape(paper.id)}" data-date="${escape(paper.date)}" data-date-kind="${paper.dateKind}">
+          <div class="paper-visual">${paper.figure ? `<img class="paper-figure" src="${escape(paper.figure)}" alt="${escape(paper.figureAlt || `Main figure of ${paper.shortName}`)}" width="224" height="168" loading="lazy">` : ''}<div class="paper-date">${date}<span class="date-kind">${kind}</span></div></div>
+          <div class="paper-content">
+            <div class="paper-header"><span class="venue${isAccepted ? '' : ' preprint'}">${isAccepted ? `${icon('check')}Accepted · ` : ''}${escape(paper.venue)}</span><span class="paper-name">${escape(paper.shortName)}</span></div>
+            <h3>${paper.arxiv || paper.preprint ? `<a href="${escape(paper.arxiv || paper.preprint)}" target="_blank" rel="noopener noreferrer">${escape(paper.title)}</a>` : escape(paper.title)}</h3>
+            ${authors}
+            <p class="paper-summary">${escape(paper.summary)}</p>
+            ${links.length ? `<div class="paper-links">${links.join('\n              ')}</div>` : ''}
+          </div>
+        </article>`;
+};
+const scholarLink = profile.scholar ? external(profile.scholar, 'Google Scholar', 'scholar') : '';
+const hasEqual = papers.some(p => p.authors.some(a => a.equal));
+const acceptedPapers = papers.filter(p => p.dateKind === 'accepted');
+const cssVersion = createHash('sha256').update(fs.readFileSync(path.join(root, 'assets/style.css'))).digest('hex').slice(0, 10);
+const page = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escape(profile.name)} | ${escape(profile.affiliation)}</title>
+  <meta name="description" content="${escape(profile.name)} — incoming Ph.D. student at Peking University. Research in reinforcement learning, large language models, and autonomous agents for long-horizon tasks.">
+  <meta name="theme-color" content="#111315">
+  <link rel="canonical" href="${escape(profile.siteUrl)}">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="${escape(profile.name)} | Academic Homepage">
+  <meta property="og:description" content="Reinforcement learning, large language models, and autonomously evolving agents for long-horizon tasks.">
+  <meta property="og:url" content="${escape(profile.siteUrl)}">
+  <meta property="og:image" content="${escape(profile.siteUrl)}assets/portrait.jpg">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/style.css?v=${cssVersion}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="wordmark" href="#about">${escape(profile.name)}</a>
+      <nav aria-label="Main navigation"><a href="#about">About</a><a href="#publications">Publications</a><a href="#contact">Contact</a></nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="about" id="about" aria-labelledby="name">
+      <div class="bio">
+        <div class="identity">
+          <p class="eyebrow">${escape(profile.affiliation)}</p>
+          <h1 id="name">${escape(profile.name)}${profile.nameChinese ? ` <span class="chinese-name" lang="zh-CN">${escape(profile.nameChinese)}</span>` : ''}</h1>
+          <p class="affiliation">${escape(profile.preferredName)} &nbsp;·&nbsp; ${escape(profile.location)}</p>
+        </div>
+        <div class="bio-text"><p>${escape(profile.intro)}</p><p>${escape(profile.research)}</p></div>
+        <div class="profile-links">
+          <a href="mailto:${escape(profile.email)}">${icon('email')}Email</a>
+          ${scholarLink}
+          ${external(profile.github, 'GitHub', 'github')}
+        </div>
+      </div>
+      <div class="portrait"><img class="profile-photo" src="assets/portrait.jpg" alt="Portrait of ${escape(profile.name)}" width="252" height="326"><div class="photo-caption">${escape(profile.location)}</div></div>
+    </section>
+    <div class="interests" aria-label="Research interests"><span class="interests-label">Research interests</span>${profile.interests.map(s => `<span class="interest">${escape(s)}</span>`).join('')}</div>
+    <section class="acceptances" aria-labelledby="acceptances-heading">
+      <h2 class="acceptances-heading" id="acceptances-heading">Recent acceptances</h2>
+      <div class="acceptance-list">${acceptedPapers.map(p => `<a class="acceptance-link" href="#${escape(p.id)}" aria-label="Accepted at ${escape(p.venue)}: ${escape(p.title)}"><span><strong>${escape(p.venue)}</strong><small>${escape(p.shortName)}</small></span>${icon('arrow')}</a>`).join('')}</div>
+    </section>
+    <section id="publications" aria-labelledby="publications-heading">
+      <div class="section-heading"><h2 id="publications-heading">Selected Papers</h2>${profile.scholar ? `<span class="section-link">${external(profile.scholar, 'Google Scholar', 'arrow')}</span>` : ''}</div>
+      <p class="section-note">Dates indicate acceptance, first preprint posting, or manuscript completion.${hasEqual ? ' &nbsp;* Equal contribution.' : ''}</p>
+      <div class="publications">${papers.map(paperHTML).join('\n        ')}</div>
+    </section>
+    <section class="contact" id="contact" aria-labelledby="contact-heading"><h2 id="contact-heading">Contact</h2><p>For research discussions and collaborations, feel free to reach out at <a href="mailto:${escape(profile.email)}">${escape(profile.email)}</a>.</p></section>
+  </main>
+  <footer class="site-footer"><span>© ${new Date().getFullYear()} ${escape(profile.name)}</span><span>${escape(profile.affiliation)} &nbsp;·&nbsp; <a href="${escape(profile.github)}">GitHub</a></span></footer>
+</body>
+</html>
+`;
+fs.writeFileSync(path.join(root, 'index.html'), page);
+console.log(`Built index.html with ${papers.length} publications.`);
+console.log(`Order: ${papers.map(p => `${p.date || '(date pending)'} ${p.shortName}`).join(' | ')}`);
+if (!profile.scholar) console.log('Pending: Google Scholar profile URL.');
+for (const paper of papers.filter(p => !p.date)) console.log(`Pending: ${paper.shortName} acceptance month.`);

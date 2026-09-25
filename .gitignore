@@ -1,0 +1,10 @@
+tmp/
+node_modules/
+.tools/
+.DS_Store
+Thumbs.db
+*.log
+/照片.jpg
+/My Paper/
+/docs/
+*.[pP][dD][fF]

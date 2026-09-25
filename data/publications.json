@@ -1,0 +1,410 @@
+[
+  {
+    "id": "hacrl",
+    "title": "Heterogeneous Agent Collaborative Reinforcement Learning",
+    "authors": [
+      {
+        "name": "Zhixia Zhang",
+        "equal": true
+      },
+      {
+        "name": "Zixuan Huang",
+        "equal": true
+      },
+      {
+        "name": "Gongxun Li"
+      },
+      {
+        "name": "Huaiyang Wang"
+      },
+      {
+        "name": "Chengyi Yuan"
+      },
+      {
+        "name": "Xin Xia"
+      },
+      {
+        "name": "Deqing Wang"
+      },
+      {
+        "name": "Fuzhen Zhuang"
+      },
+      {
+        "name": "Shuai Ma"
+      },
+      {
+        "name": "Ning Ding"
+      },
+      {
+        "name": "Yaodong Yang"
+      },
+      {
+        "name": "Jianxin Li"
+      },
+      {
+        "name": "Yikun Ban"
+      }
+    ],
+    "summary": "Enables heterogeneous agents to learn from shared verified rollouts while remaining independent at inference time.",
+    "date": "2026-09",
+    "dateKind": "accepted",
+    "venue": "NeurIPS 2026",
+    "shortName": "HACRL",
+    "arxiv": "https://arxiv.org/abs/2603.02604",
+    "code": "https://github.com/zzx-peter/HACRL-code",
+    "figure": "assets/figures/hacrl.webp",
+    "figureAlt": "HACRL framework for collaborative reinforcement learning with shared rollouts from heterogeneous agents."
+  },
+  {
+    "id": "sage-rl",
+    "title": "Does Your Reasoning Model Implicitly Know When to Stop Thinking?",
+    "authors": [
+      {
+        "name": "Zixuan Huang"
+      },
+      {
+        "name": "Xin Xia"
+      },
+      {
+        "name": "Yuxi Ren"
+      },
+      {
+        "name": "Jianbin Zheng"
+      },
+      {
+        "name": "Xuanda Wang"
+      },
+      {
+        "name": "Zhixia Zhang"
+      },
+      {
+        "name": "Hongyan Xie"
+      },
+      {
+        "name": "Songshi Liang"
+      },
+      {
+        "name": "Zehao Chen"
+      },
+      {
+        "name": "Xuefeng Xiao"
+      },
+      {
+        "name": "Fuzhen Zhuang"
+      },
+      {
+        "name": "Jianxin Li"
+      },
+      {
+        "name": "Deqing Wang"
+      },
+      {
+        "name": "Yikun Ban"
+      }
+    ],
+    "summary": "Uses self-aware sampling and reinforcement learning to help reasoning models find concise, effective chains of thought.",
+    "date": "2026-04",
+    "dateKind": "accepted",
+    "venue": "ICML 2026",
+    "shortName": "SAGE-RL",
+    "arxiv": "https://arxiv.org/abs/2602.08354",
+    "figure": "assets/figures/sage-rl.webp",
+    "figureAlt": "SAGE identifies efficient reasoning paths and trains models to improve accuracy while using fewer tokens."
+  },
+  {
+    "id": "bayesian-trading",
+    "title": "Bayesian Robust Financial Trading with Adversarial Synthetic Market Data",
+    "authors": [
+      {
+        "name": "Haochong Xia",
+        "equal": true
+      },
+      {
+        "name": "Simin Li",
+        "equal": true
+      },
+      {
+        "name": "Ruixiao Xu"
+      },
+      {
+        "name": "Zhixia Zhang"
+      },
+      {
+        "name": "Hongxiang Wang"
+      },
+      {
+        "name": "Zhiqian Liu"
+      },
+      {
+        "name": "Teng Yao Long"
+      },
+      {
+        "name": "Molei Qin"
+      },
+      {
+        "name": "Chuqiao Zong"
+      },
+      {
+        "name": "Bo An"
+      }
+    ],
+    "summary": "Combines macro-conditioned synthetic markets with Bayesian adversarial learning to improve trading robustness under changing market regimes.",
+    "date": null,
+    "dateKind": "accepted",
+    "venue": "KDD 2026",
+    "shortName": "Bayesian Robust Trading",
+    "arxiv": "https://arxiv.org/abs/2601.17008",
+    "code": "https://github.com/XiaHaochong98/Bayesian-Robust-Financial-Trading-with-Adversarial-Synthetic-Market-Data",
+    "figure": "assets/figures/bayesian-trading.webp",
+    "figureAlt": "Bayesian trading framework linking an adversarial synthetic market to a robust trading agent."
+  },
+  {
+    "id": "pipo",
+    "title": "Policy Improvement Reinforcement Learning",
+    "authors": [
+      {
+        "name": "Huaiyang Wang",
+        "equal": true
+      },
+      {
+        "name": "Xiaojie Li",
+        "equal": true
+      },
+      {
+        "name": "Xiaohan Wang"
+      },
+      {
+        "name": "Zhixia Zhang"
+      },
+      {
+        "name": "Xiaodong Lu"
+      },
+      {
+        "name": "Zixuan Huang"
+      },
+      {
+        "name": "Jiajun Chai"
+      },
+      {
+        "name": "Guojun Yin"
+      },
+      {
+        "name": "Deqing Wang"
+      },
+      {
+        "name": "Haoyi Zhou"
+      },
+      {
+        "name": "Yaodong Yang"
+      },
+      {
+        "name": "Jianxin Li"
+      },
+      {
+        "name": "Yikun Ban"
+      }
+    ],
+    "summary": "Closes the policy optimization loop by verifying whether each update improves performance and using that feedback to regulate learning.",
+    "date": "2026-04",
+    "dateKind": "arxiv",
+    "venue": "Preprint",
+    "shortName": "PIRL / PIPO",
+    "arxiv": "https://arxiv.org/abs/2604.00860",
+    "figure": "assets/figures/pipo.webp",
+    "figureAlt": "PIPO closes the reinforcement learning loop with policy improvement verification and adaptive updates."
+  },
+  {
+    "id": "epistemic-exploration",
+    "title": "Agent Exploration Toward Artificial General Intelligence: A Survey",
+    "authors": [
+      {
+        "name": "Yikun Ban"
+      },
+      {
+        "name": "Fengkai Yang",
+        "equal": true
+      },
+      {
+        "name": "Fangzheng Chen",
+        "equal": true
+      },
+      {
+        "name": "Yibo Wang",
+        "equal": true
+      },
+      {
+        "name": "Zhijun Chen",
+        "equal": true
+      },
+      {
+        "name": "Zhongyi Li",
+        "equal": true
+      },
+      {
+        "name": "Gongxun Li"
+      },
+      {
+        "name": "Huaiyang Wang"
+      },
+      {
+        "name": "Xiaodong Lu"
+      },
+      {
+        "name": "Zixuan Huang"
+      },
+      {
+        "name": "Xiaoyuan Zhang"
+      },
+      {
+        "name": "Zehao Chen"
+      },
+      {
+        "name": "Yaocheng Yang"
+      },
+      {
+        "name": "Pengcheng Wei"
+      },
+      {
+        "name": "Wan Tian"
+      },
+      {
+        "name": "Zherui Chen"
+      },
+      {
+        "name": "Zhixia Zhang"
+      },
+      {
+        "name": "Hongyan Xie"
+      },
+      {
+        "name": "Lingyu Lv"
+      },
+      {
+        "name": "Xiaohan Wang"
+      },
+      {
+        "name": "Jiajun Chai"
+      },
+      {
+        "name": "Guojun Yin"
+      },
+      {
+        "name": "Wei Lin"
+      },
+      {
+        "name": "Tianxiang Ai"
+      },
+      {
+        "name": "Zhongxiang Dai"
+      },
+      {
+        "name": "Zhiyong Wang"
+      },
+      {
+        "name": "Ruijie Wang"
+      },
+      {
+        "name": "Haoyi Zhou"
+      },
+      {
+        "name": "Chaochao Lu"
+      },
+      {
+        "name": "Wanxiang Che"
+      },
+      {
+        "name": "Fuzhen Zhuang"
+      },
+      {
+        "name": "Ning Ding"
+      },
+      {
+        "name": "Qianqian Xu"
+      },
+      {
+        "name": "Deqing Wang"
+      },
+      {
+        "name": "Yaodong Yang"
+      },
+      {
+        "name": "Jianxin Li"
+      }
+    ],
+    "summary": "Presents exploration as a mechanism for progressing from reactive models to reasoning agents, prospectors, and collaborative ecosystems.",
+    "date": "2026-05",
+    "dateKind": "preprint",
+    "venue": "Survey · Preprint",
+    "shortName": "Agent Exploration",
+    "preprint": "https://doi.org/10.5281/zenodo.20201414",
+    "project": "https://github.com/banyikun/agent_exploration",
+    "figure": "assets/figures/epistemic-exploration.webp",
+    "figureAlt": "Five levels toward AGI connect exploration spaces with information gain, value improvement, and epistemic reachability."
+  },
+  {
+    "id": "ms-ttrl",
+    "title": "Breaking the Frequency Conflict in Multiple-Solution Test-Time Reinforcement Learning",
+    "authors": [
+      {
+        "name": "Zhixia Zhang"
+      },
+      {
+        "name": "Bingqian Xu"
+      },
+      {
+        "name": "Dianbo Liu"
+      }
+    ],
+    "summary": "Separates correctness verification from generation frequency to preserve diverse valid outcomes during test-time reinforcement learning.",
+    "date": "2026-09",
+    "dateKind": "completed",
+    "venue": "Manuscript",
+    "shortName": "MS-TTRL",
+    "figure": "assets/figures/ms-ttrl.webp",
+    "figureAlt": "MS-TTRL workflow with outcome verification, persistent memory, and confidence-gated policy updates."
+  },
+  {
+    "id": "sentencepo",
+    "title": "SentencePO: Sentence-Level Trust Region and Credit Assignment for Reinforcement Learning with Verifiable Rewards",
+    "authors": [],
+    "summary": "Uses sentence-level trust regions and credit assignment to improve the stability and precision of reinforcement learning for long-form reasoning.",
+    "date": "2026-05",
+    "dateKind": "completed",
+    "venue": "Manuscript",
+    "shortName": "SentencePO",
+    "authorNote": "Author order is not yet confirmed.",
+    "figure": "assets/figures/sentencepo.webp",
+    "figureAlt": "SentencePO framework for sentence-level advantage estimation, credit assignment, and trust-region optimization."
+  },
+  {
+    "id": "adversarial-transfer",
+    "title": "Adversarial Policy Transfer in Mixed Cooperative-Competitive Games",
+    "authors": [
+      {
+        "name": "Ruixiao Xu"
+      },
+      {
+        "name": "Zhiqian Liu"
+      },
+      {
+        "name": "Zhixia Zhang"
+      },
+      {
+        "name": "Simin Li"
+      },
+      {
+        "name": "Yaodong Yang"
+      },
+      {
+        "name": "Xianglong Liu"
+      }
+    ],
+    "summary": "Transfers adversarial tactics across cooperative-competitive multi-agent games to reveal shared vulnerabilities and improve robustness.",
+    "date": "2025-05",
+    "dateKind": "completed",
+    "venue": "Manuscript",
+    "shortName": "Adversarial Policy Transfer",
+    "figure": "assets/figures/adversarial-transfer.webp",
+    "figureAlt": "Transferable adversarial policy framework combining tactic acquisition with scene decomposition."
+  }
+]
