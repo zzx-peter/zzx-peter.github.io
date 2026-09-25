@@ -42,9 +42,11 @@ for (const paper of papers) {
 // A pending acceptance date has no invented month. Confirm it in publications.json.
 const dateKindPriority = { accepted: 0, arxiv: 1, preprint: 1, completed: 2 };
 papers.sort((a, b) => (b.date || '').localeCompare(a.date || '') || dateKindPriority[a.dateKind] - dateKindPriority[b.dateKind] || a.title.localeCompare(b.title));
+const isProfileAuthor = (author) => [profile.name, profile.publicationName].includes(typeof author === 'string' ? author : author.name);
 const authorHTML = (author) => {
-  const name = escape(typeof author === 'string' ? author : author.name);
-  const formatted = name === escape(profile.name) ? `<strong>${name}</strong>` : name;
+  const isSelf = isProfileAuthor(author);
+  const name = escape(isSelf ? profile.name : (typeof author === 'string' ? author : author.name));
+  const formatted = isSelf ? `<strong>${name}</strong>` : name;
   return formatted + (author.equal ? '<sup>*</sup>' : '');
 };
 const paperHTML = (paper) => {
@@ -58,7 +60,7 @@ const paperHTML = (paper) => {
   if (paper.code) links.push(external(paper.code, 'Code', ''));
   let authors = paper.authors.length ? `<p class="authors">${paper.authors.map(authorHTML).join(', ')}</p>` : '';
   if (paper.authors.length > 18) {
-    const featuredAuthor = paper.authors.find(a => a.name === profile.name);
+    const featuredAuthor = paper.authors.find(isProfileAuthor);
     const excerpt = [...paper.authors.slice(0, 2).map(authorHTML), '…', ...(featuredAuthor ? [authorHTML(featuredAuthor)] : []), 'et al.'].join(', ');
     authors = `<details class="author-details"><summary><span class="authors">${excerpt}</span><span class="author-toggle"><span class="more">All ${paper.authors.length} authors</span><span class="less">Fewer authors</span>${icon('chevron')}</span></summary>${authors}</details>`;
   }
@@ -83,7 +85,7 @@ const page = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escape(profile.name)} | ${escape(profile.affiliation)}</title>
-  <meta name="description" content="${escape(profile.name)} — incoming Ph.D. student at Peking University. Research in reinforcement learning, large language models, and autonomous agents for long-horizon tasks.">
+  <meta name="description" content="${escape(profile.name)} — ${escape(profile.affiliation)}. Research in reinforcement learning, large language models, and autonomous agents for long-horizon tasks.">
   <meta name="theme-color" content="#111315">
   <link rel="canonical" href="${escape(profile.siteUrl)}">
   <meta property="og:type" content="profile">
@@ -108,9 +110,9 @@ const page = `<!doctype html>
         <div class="identity">
           <p class="eyebrow">${escape(profile.affiliation)}</p>
           <h1 id="name">${escape(profile.name)}${profile.nameChinese ? ` <span class="chinese-name" lang="zh-CN">${escape(profile.nameChinese)}</span>` : ''}</h1>
-          <p class="affiliation">${escape(profile.preferredName)} &nbsp;·&nbsp; ${escape(profile.location)}</p>
+          <p class="affiliation">${escape(profile.location)}</p>
         </div>
-        <div class="bio-text"><p>${escape(profile.intro)}</p><p>${escape(profile.research)}</p></div>
+        <div class="bio-text"><p>${escape(profile.intro)}</p>${profile.experience ? `<p>${escape(profile.experience)}</p>` : ''}<p>${escape(profile.research)}</p></div>
         <div class="profile-links">
           <a href="mailto:${escape(profile.email)}">${icon('email')}Email</a>
           ${scholarLink}

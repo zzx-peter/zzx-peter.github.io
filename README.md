@@ -1,4 +1,4 @@
-# Zhixia Zhang — Academic Homepage
+# Zhang Zhixia — Academic Homepage
 
 个人学术主页：<https://zzx-peter.github.io/>。纯静态 HTML/CSS，无需安装 npm 依赖。
 
