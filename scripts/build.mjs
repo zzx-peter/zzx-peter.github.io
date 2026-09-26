@@ -112,7 +112,7 @@ const page = `<!doctype html>
           <h1 id="name">${escape(profile.name)}${profile.nameChinese ? ` <span class="chinese-name" lang="zh-CN">${escape(profile.nameChinese)}</span>` : ''}</h1>
           <p class="affiliation">${escape(profile.location)}</p>
         </div>
-        <div class="bio-text"><p>${escape(profile.intro)}</p>${profile.experience ? `<p>${escape(profile.experience)}</p>` : ''}<p>${escape(profile.research)}</p></div>
+        <div class="bio-text"><p>${escape(profile.intro).replace('Ling Yang', '<strong>Ling Yang</strong>')}</p>${profile.experience ? `<p>${escape(profile.experience)}</p>` : ''}<p>${escape(profile.research)}</p></div>
       </div>
       <div class="profile-sidebar">
         <div class="portrait"><img class="profile-photo" src="assets/portrait.jpg" alt="Portrait of ${escape(profile.name)}" width="252" height="326"><div class="photo-caption">${escape(profile.location)}</div></div>
