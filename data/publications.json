@@ -343,7 +343,7 @@
   },
   {
     "id": "ms-ttrl",
-    "title": "Breaking the Frequency Conflict in Multiple-Solution Test-Time Reinforcement Learning",
+    "title": "MS-TTRL: Breaking the Frequency Conflict in Multiple-Solution Test-Time Reinforcement Learning",
     "authors": [
       {
         "name": "Zhixia Zhang"
@@ -352,16 +352,22 @@
         "name": "Bingqian Xu"
       },
       {
+        "name": "Huaiyang Wang"
+      },
+      {
+        "name": "Yikun Ban"
+      },
+      {
         "name": "Dianbo Liu"
       }
     ],
-    "summary": "Separates correctness verification from generation frequency to preserve diverse valid outcomes during test-time reinforcement learning.",
+    "summary": "Decouples self-verified correctness from outcome frequency, using a three-state cache and confidence-gated scaling to preserve diverse solutions during test-time reinforcement learning.",
     "date": "2026-09",
     "dateKind": "completed",
     "venue": "Manuscript",
     "shortName": "MS-TTRL",
     "figure": "assets/figures/ms-ttrl.webp",
-    "figureAlt": "MS-TTRL workflow with outcome verification, persistent memory, and confidence-gated policy updates."
+    "figureAlt": "MS-TTRL framework with outcome self-verification, a three-state cache, and confidence-gated reward assignment."
   },
   {
     "id": "sentencepo",

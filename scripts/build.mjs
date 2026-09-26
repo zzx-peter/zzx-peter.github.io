@@ -51,6 +51,7 @@ const authorHTML = (author) => {
 };
 const paperHTML = (paper) => {
   const isAccepted = paper.dateKind === 'accepted';
+  const figureSource = paper.figure ? `${paper.figure}?v=${createHash('sha256').update(fs.readFileSync(path.join(root, paper.figure))).digest('hex').slice(0, 10)}` : '';
   const date = paper.date ? `<time datetime="${paper.date}">${paper.date.replace('-', '.')}</time>` : '<span class="pending-date">Date pending</span>';
   const kind = { accepted: 'Accepted', arxiv: 'arXiv', preprint: 'First posted', completed: 'Completed' }[paper.dateKind];
   const links = [];
@@ -65,7 +66,7 @@ const paperHTML = (paper) => {
     authors = `<details class="author-details"><summary><span class="authors">${excerpt}</span><span class="author-toggle"><span class="more">All ${paper.authors.length} authors</span><span class="less">Fewer authors</span>${icon('chevron')}</span></summary>${authors}</details>`;
   }
   return `<article class="publication${isAccepted ? ' is-accepted' : ''}" id="${escape(paper.id)}" data-date="${escape(paper.date)}" data-date-kind="${paper.dateKind}">
-          <div class="paper-visual">${paper.figure ? `<img class="paper-figure" src="${escape(paper.figure)}" alt="${escape(paper.figureAlt || `Main figure of ${paper.shortName}`)}" width="224" height="168" loading="lazy">` : ''}<div class="paper-date">${date}<span class="date-kind">${kind}</span></div></div>
+          <div class="paper-visual">${paper.figure ? `<img class="paper-figure" src="${escape(figureSource)}" alt="${escape(paper.figureAlt || `Main figure of ${paper.shortName}`)}" width="224" height="168" loading="lazy">` : ''}<div class="paper-date">${date}<span class="date-kind">${kind}</span></div></div>
           <div class="paper-content">
             <div class="paper-header"><span class="venue${isAccepted ? '' : ' preprint'}">${isAccepted ? `${icon('check')}Accepted · ` : ''}${escape(paper.venue)}</span><span class="paper-name">${escape(paper.shortName)}</span></div>
             <h3>${paper.arxiv || paper.preprint ? `<a href="${escape(paper.arxiv || paper.preprint)}" target="_blank" rel="noopener noreferrer">${escape(paper.title)}</a>` : escape(paper.title)}</h3>
@@ -77,7 +78,6 @@ const paperHTML = (paper) => {
 };
 const scholarLink = profile.scholar ? external(profile.scholar, 'Google Scholar', 'scholar') : '';
 const hasEqual = papers.some(p => p.authors.some(a => a.equal));
-const acceptedPapers = papers.filter(p => p.dateKind === 'accepted');
 const cssVersion = createHash('sha256').update(fs.readFileSync(path.join(root, 'assets/style.css'))).digest('hex').slice(0, 10);
 const page = `<!doctype html>
 <html lang="en">
@@ -113,21 +113,19 @@ const page = `<!doctype html>
           <p class="affiliation">${escape(profile.location)}</p>
         </div>
         <div class="bio-text"><p>${escape(profile.intro)}</p>${profile.experience ? `<p>${escape(profile.experience)}</p>` : ''}<p>${escape(profile.research)}</p></div>
-        <div class="profile-links">
+      </div>
+      <div class="profile-sidebar">
+        <div class="portrait"><img class="profile-photo" src="assets/portrait.jpg" alt="Portrait of ${escape(profile.name)}" width="252" height="326"><div class="photo-caption">${escape(profile.location)}</div></div>
+        <div class="profile-links" aria-label="Profile links">
           <a href="mailto:${escape(profile.email)}">${icon('email')}Email</a>
           ${scholarLink}
           ${external(profile.github, 'GitHub', 'github')}
         </div>
       </div>
-      <div class="portrait"><img class="profile-photo" src="assets/portrait.jpg" alt="Portrait of ${escape(profile.name)}" width="252" height="326"><div class="photo-caption">${escape(profile.location)}</div></div>
     </section>
-    <div class="interests" aria-label="Research interests"><span class="interests-label">Research interests</span>${profile.interests.map(s => `<span class="interest">${escape(s)}</span>`).join('')}</div>
-    <section class="acceptances" aria-labelledby="acceptances-heading">
-      <h2 class="acceptances-heading" id="acceptances-heading">Recent acceptances</h2>
-      <div class="acceptance-list">${acceptedPapers.map(p => `<a class="acceptance-link" href="#${escape(p.id)}" aria-label="Accepted at ${escape(p.venue)}: ${escape(p.title)}"><span><strong>${escape(p.venue)}</strong><small>${escape(p.shortName)}</small></span>${icon('arrow')}</a>`).join('')}</div>
-    </section>
+    <section class="interests" aria-labelledby="interests-heading"><h2 class="interests-label" id="interests-heading">Research interests</h2>${profile.interests.map(s => `<span class="interest">${escape(s)}</span>`).join('')}</section>
     <section id="publications" aria-labelledby="publications-heading">
-      <div class="section-heading"><h2 id="publications-heading">Selected Papers</h2>${profile.scholar ? `<span class="section-link">${external(profile.scholar, 'Google Scholar', 'arrow')}</span>` : ''}</div>
+      <div class="section-heading"><h2 id="publications-heading">Selected Papers</h2></div>
       <p class="section-note">Dates indicate acceptance, first preprint posting, or manuscript completion.${hasEqual ? ' &nbsp;* Equal contribution.' : ''}</p>
       <div class="publications">${papers.map(paperHTML).join('\n        ')}</div>
     </section>
