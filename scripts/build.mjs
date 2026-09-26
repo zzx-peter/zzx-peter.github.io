@@ -77,6 +77,10 @@ const paperHTML = (paper) => {
         </article>`;
 };
 const scholarLink = profile.scholar ? external(profile.scholar, 'Google Scholar', 'scholar') : '';
+const introHTML = escape(profile.intro)
+  .replace('Peking University', '<strong>Peking University</strong>')
+  .replace(escape(profile.advisor.name), () => `<strong>${external(profile.advisor.url, profile.advisor.name, '')}</strong>`)
+  .replace(escape(profile.group.name), () => external(profile.group.url, profile.group.name, ''));
 const hasEqual = papers.some(p => p.authors.some(a => a.equal));
 const cssVersion = createHash('sha256').update(fs.readFileSync(path.join(root, 'assets/style.css'))).digest('hex').slice(0, 10);
 const page = `<!doctype html>
@@ -112,7 +116,7 @@ const page = `<!doctype html>
           <h1 id="name">${escape(profile.name)}${profile.nameChinese ? ` <span class="chinese-name" lang="zh-CN">${escape(profile.nameChinese)}</span>` : ''}</h1>
           <p class="affiliation">${escape(profile.location)}</p>
         </div>
-        <div class="bio-text"><p>${escape(profile.intro).replace('Peking University', '<strong>Peking University</strong>').replace('Prof. Ling Yang', '<strong>Prof. Ling Yang</strong>')}</p>${profile.experience ? `<p>${escape(profile.experience)}</p>` : ''}<p>${escape(profile.research)}</p></div>
+        <div class="bio-text"><p>${introHTML}</p><p>${escape(profile.research)}</p></div>
       </div>
       <div class="profile-sidebar">
         <div class="portrait"><img class="profile-photo" src="assets/portrait.jpg" alt="Portrait of ${escape(profile.name)}" width="252" height="326"><div class="photo-caption">${escape(profile.location)}</div></div>

@@ -8,8 +8,9 @@
   "github": "https://github.com/zzx-peter",
   "scholar": "https://scholar.google.com/citations?user=7wSsqNoAAAAJ&hl=zh-CN",
   "siteUrl": "https://zzx-peter.github.io/",
-  "intro": "I am an undergraduate student in Computer Science and Technology at Beihang University. I will begin a direct-entry Ph.D. at Peking University in Fall 2027, advised by Prof. Ling Yang.",
-  "experience": "I completed three research internships: one in Prof. Dianbo Liu’s group at the National University of Singapore, one under Prof. Yikun Ban, and one under Prof. Xianglong Liu. These experiences broadened my perspective on reinforcement learning and intelligent agents and helped shape the research questions I hope to pursue in my doctoral studies.",
-  "research": "My research interests lie in reinforcement learning, large language models, and AI agents. My long-term goal is to build agent systems that can learn from experience, autonomously evolve, and reliably carry out long-horizon tasks. I am particularly interested in the learning mechanisms that make these capabilities possible and in exploring their applications to real-world problems.",
+  "intro": "I am an undergraduate student in Computer Science and Technology at Beihang University. In Fall 2027, I will join the Discovery Intelligence Group (DIG) at Peking University as a direct-entry Ph.D. student, advised by Prof. Ling Yang.",
+  "advisor": { "name": "Prof. Ling Yang", "url": "https://yangling0818.github.io/" },
+  "group": { "name": "Discovery Intelligence Group (DIG)", "url": "https://gen-verse.github.io/DIG/" },
+  "research": "My research interests lie in reinforcement learning, large language models, and AI agents, with a focus on how agents learn, reason, and improve through interaction and experience. My long-term goal is to build agent systems that can autonomously evolve and reliably carry out long-horizon tasks. I am particularly interested in the learning mechanisms that support these capabilities and their applications to real-world problems.",
   "interests": ["Reinforcement learning", "Large language models", "Autonomous agents", "Long-horizon reasoning"]
 }
