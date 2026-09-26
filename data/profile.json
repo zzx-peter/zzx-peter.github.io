@@ -9,7 +9,7 @@
   "scholar": "https://scholar.google.com/citations?user=7wSsqNoAAAAJ&hl=zh-CN",
   "siteUrl": "https://zzx-peter.github.io/",
   "intro": "I am an undergraduate student in Computer Science and Technology at Beihang University. I will begin a direct-entry Ph.D. at Peking University in Fall 2027, advised by Prof. Ling Yang.",
-  "experience": "I am a research intern in Prof. Dianbo Liu’s group at the National University of Singapore (July–October 2026). I previously held research internships with Profs. Xianglong Liu and Yikun Ban.",
+  "experience": "I completed three research internships: one in Prof. Dianbo Liu’s group at the National University of Singapore, one under Prof. Xianglong Liu, and one under Prof. Yikun Ban.",
   "research": "My research interests lie in reinforcement learning, large language models, and AI agents. My long-term goal is to build agent systems that can autonomously evolve, learn from experience, and reliably carry out long-horizon tasks. I am particularly interested in the learning mechanisms that make these capabilities possible and in exploring their applications to real-world problems.",
   "interests": ["Reinforcement learning", "Large language models", "Autonomous agents", "Long-horizon reasoning"]
 }

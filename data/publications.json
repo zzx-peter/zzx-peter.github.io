@@ -75,7 +75,8 @@
         "name": "Xuanda Wang"
       },
       {
-        "name": "Zhixia Zhang"
+        "name": "Zhixia Zhang",
+        "contribution": "Second student author"
       },
       {
         "name": "Hongyan Xie"
@@ -107,6 +108,7 @@
     "dateKind": "accepted",
     "venue": "ICML 2026",
     "shortName": "SAGE-RL",
+    "contributionNote": "Second student author",
     "arxiv": "https://arxiv.org/abs/2602.08354",
     "figure": "assets/figures/sage-rl.webp",
     "figureAlt": "SAGE identifies efficient reasoning paths and trains models to improve accuracy while using fewer tokens."
@@ -210,6 +212,7 @@
     "venue": "Preprint",
     "shortName": "PIRL / PIPO",
     "arxiv": "https://arxiv.org/abs/2604.00860",
+    "code": "https://github.com/JacckMa/pipo_verl",
     "figure": "assets/figures/pipo.webp",
     "figureAlt": "PIPO closes the reinforcement learning loop with policy improvement verification and adaptive updates."
   },
@@ -372,13 +375,24 @@
   {
     "id": "sentencepo",
     "title": "SentencePO: Sentence-Level Trust Region and Credit Assignment for Reinforcement Learning with Verifiable Rewards",
-    "authors": [],
+    "authors": [
+      { "name": "Ziyuan Wang" },
+      { "name": "Fengkai Yang" },
+      { "name": "Yumo Jiang" },
+      { "name": "Zhixia Zhang" },
+      { "name": "Yikun Ban" },
+      { "name": "Xiaohan Wang" },
+      { "name": "Jiajun Chai" },
+      { "name": "Guojun Yin" },
+      { "name": "Wei Lin" },
+      { "name": "Deqing Wang" },
+      { "name": "Fuzhen Zhuang" }
+    ],
     "summary": "Uses sentence-level trust regions and credit assignment to improve the stability and precision of reinforcement learning for long-form reasoning.",
     "date": "2026-05",
     "dateKind": "completed",
     "venue": "Manuscript",
     "shortName": "SentencePO",
-    "authorNote": "Author order is not yet confirmed.",
     "figure": "assets/figures/sentencepo.webp",
     "figureAlt": "SentencePO framework for sentence-level advantage estimation, credit assignment, and trust-region optimization."
   },

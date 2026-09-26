@@ -47,16 +47,16 @@ const authorHTML = (author) => {
   const isSelf = isProfileAuthor(author);
   const name = escape(isSelf ? profile.name : (typeof author === 'string' ? author : author.name));
   const formatted = isSelf ? `<strong>${name}</strong>` : name;
-  return formatted + (author.equal ? '<sup>*</sup>' : '');
+  const contribution = author.contribution || (author.equal ? 'Equal contribution' : '');
+  return formatted + (contribution ? `<sup class="equal-marker" title="${escape(contribution)}" aria-label="${escape(contribution)}">*</sup>` : '');
 };
 const paperHTML = (paper) => {
   const isAccepted = paper.dateKind === 'accepted';
   const figureSource = paper.figure ? `${paper.figure}?v=${createHash('sha256').update(fs.readFileSync(path.join(root, paper.figure))).digest('hex').slice(0, 10)}` : '';
   const date = paper.date ? `<time datetime="${paper.date}">${paper.date.replace('-', '.')}</time>` : '<span class="pending-date">Date pending</span>';
-  const kind = { accepted: 'Accepted', arxiv: 'arXiv', preprint: 'First posted', completed: 'Completed' }[paper.dateKind];
   const links = [];
   if (paper.arxiv) links.push(external(paper.arxiv, 'arXiv', ''));
-  if (paper.preprint) links.push(external(paper.preprint, 'Preprint', ''));
+  if (paper.preprint) links.push(external(paper.preprint, 'Pre-print', ''));
   if (paper.project) links.push(external(paper.project, 'GitHub', ''));
   if (paper.code) links.push(external(paper.code, 'Code', ''));
   let authors = paper.authors.length ? `<p class="authors">${paper.authors.map(authorHTML).join(', ')}</p>` : '';
@@ -66,11 +66,11 @@ const paperHTML = (paper) => {
     authors = `<details class="author-details"><summary><span class="authors">${excerpt}</span><span class="author-toggle"><span class="more">All ${paper.authors.length} authors</span><span class="less">Fewer authors</span>${icon('chevron')}</span></summary>${authors}</details>`;
   }
   return `<article class="publication${isAccepted ? ' is-accepted' : ''}" id="${escape(paper.id)}" data-date="${escape(paper.date)}" data-date-kind="${paper.dateKind}">
-          <div class="paper-visual">${paper.figure ? `<img class="paper-figure" src="${escape(figureSource)}" alt="${escape(paper.figureAlt || `Main figure of ${paper.shortName}`)}" width="224" height="168" loading="lazy">` : ''}<div class="paper-date">${date}<span class="date-kind">${kind}</span></div></div>
+          <div class="paper-visual">${paper.figure ? `<img class="paper-figure" src="${escape(figureSource)}" alt="${escape(paper.figureAlt || `Main figure of ${paper.shortName}`)}" width="224" height="168" loading="lazy">` : ''}<div class="paper-date">${date}${isAccepted ? '<span class="date-kind">Accepted</span>' : ''}</div></div>
           <div class="paper-content">
             <div class="paper-header"><span class="venue${isAccepted ? '' : ' preprint'}">${isAccepted ? `${icon('check')}Accepted · ` : ''}${escape(paper.venue)}</span><span class="paper-name">${escape(paper.shortName)}</span></div>
             <h3>${paper.arxiv || paper.preprint ? `<a href="${escape(paper.arxiv || paper.preprint)}" target="_blank" rel="noopener noreferrer">${escape(paper.title)}</a>` : escape(paper.title)}</h3>
-            ${authors}
+            ${authors}${paper.contributionNote ? `\n            <p class="contribution-note"><span class="equal-marker">*</span> ${escape(paper.contributionNote)}</p>` : ''}
             <p class="paper-summary">${escape(paper.summary)}</p>
             ${links.length ? `<div class="paper-links">${links.join('\n              ')}</div>` : ''}
           </div>
@@ -101,7 +101,7 @@ const page = `<!doctype html>
   <header class="site-header">
     <div class="header-inner">
       <a class="wordmark" href="#about">${escape(profile.name)}</a>
-      <nav aria-label="Main navigation"><a href="#about">About</a><a href="#publications">Publications</a><a href="#contact">Contact</a></nav>
+      <nav aria-label="Main navigation"><a href="#about">About</a><a href="#publications">Publications</a></nav>
     </div>
   </header>
   <main id="main">
@@ -126,12 +126,11 @@ const page = `<!doctype html>
     <section class="interests" aria-labelledby="interests-heading"><h2 class="interests-label" id="interests-heading">Research interests</h2>${profile.interests.map(s => `<span class="interest">${escape(s)}</span>`).join('')}</section>
     <section id="publications" aria-labelledby="publications-heading">
       <div class="section-heading"><h2 id="publications-heading">Selected Papers</h2></div>
-      <p class="section-note">Dates indicate acceptance, first preprint posting, or manuscript completion.${hasEqual ? ' &nbsp;* Equal contribution.' : ''}</p>
+      <p class="section-note">Dates indicate acceptance, first preprint posting, or manuscript completion.${hasEqual ? ' &nbsp;<span class="equal-marker">*</span> Equal contribution, unless otherwise noted.' : ''}</p>
       <div class="publications">${papers.map(paperHTML).join('\n        ')}</div>
     </section>
-    <section class="contact" id="contact" aria-labelledby="contact-heading"><h2 id="contact-heading">Contact</h2><p>For research discussions and collaborations, feel free to reach out at <a href="mailto:${escape(profile.email)}">${escape(profile.email)}</a>.</p></section>
   </main>
-  <footer class="site-footer"><span>© ${new Date().getFullYear()} ${escape(profile.name)}</span><span>${escape(profile.affiliation)} &nbsp;·&nbsp; <a href="${escape(profile.github)}">GitHub</a></span></footer>
+  <footer class="site-footer"><span>© ${escape(profile.name)}</span><span>${escape(profile.affiliation)} &nbsp;·&nbsp; <a href="${escape(profile.github)}">GitHub</a></span></footer>
 </body>
 </html>
 `;
