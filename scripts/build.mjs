@@ -126,7 +126,7 @@ const page = `<!doctype html>
     <section class="interests" aria-labelledby="interests-heading"><h2 class="interests-label" id="interests-heading">Research interests</h2>${profile.interests.map(s => `<span class="interest">${escape(s)}</span>`).join('')}</section>
     <section id="publications" aria-labelledby="publications-heading">
       <div class="section-heading"><h2 id="publications-heading">Selected Papers</h2></div>
-      <p class="section-note">Dates indicate acceptance, first preprint posting, or manuscript completion.${hasEqual ? ' &nbsp;<span class="equal-marker">*</span> Equal contribution, unless otherwise noted.' : ''}</p>
+      ${hasEqual ? '<p class="section-note"><span class="equal-marker">*</span> Equal contribution, unless otherwise noted.</p>' : ''}
       <div class="publications">${papers.map(paperHTML).join('\n        ')}</div>
     </section>
   </main>
