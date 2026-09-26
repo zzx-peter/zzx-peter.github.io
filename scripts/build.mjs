@@ -11,6 +11,8 @@ const escape = (value = '') => String(value).replace(/[&<>"']/g, char => ({ '&':
 const icon = (kind) => {
   const paths = {
     email: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m3 6 9 7 9-7"/>',
+    location: '<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
+    university: '<path d="m2 7 10-5 10 5H2Zm1 13h18M2 22h20M5 10v7m5-7v7m4-7v7m5-7v7"/>',
     scholar: '<path d="m2 9 10-6 10 6-10 6Z"/><path d="M6 12v6c4 3 8 3 12 0v-6M22 9v8"/>',
     github: '<path d="M9 20c-5 1-5-3-7-3m14 6v-4a3.5 3.5 0 0 0-1-3c3-.4 6-1.4 6-7a5 5 0 0 0-1.5-3.5A4.6 4.6 0 0 0 19.4 2S18.2 1.6 16 3a13 13 0 0 0-8 0C5.8 1.6 4.6 2 4.6 2a4.6 4.6 0 0 0-.1 3.5A5 5 0 0 0 3 9c0 5.6 3 6.6 6 7a3.5 3.5 0 0 0-1 3v4"/>',
     arrow: '<path d="M7 17 17 7M7 7h10v10"/>',
@@ -108,33 +110,41 @@ const page = `<!doctype html>
       <nav aria-label="Main navigation"><a href="#about">About</a><a href="#publications">Publications</a></nav>
     </div>
   </header>
-  <main id="main">
-    <section class="about" id="about" aria-labelledby="name">
-      <div class="bio">
-        <div class="identity">
-          <p class="eyebrow">${escape(profile.affiliation)}</p>
-          <h1 id="name">${escape(profile.name)}${profile.nameChinese ? ` <span class="chinese-name" lang="zh-CN">${escape(profile.nameChinese)}</span>` : ''}</h1>
-          <p class="affiliation">${escape(profile.location)}</p>
+  <div class="page-layout">
+    <aside class="profile-sidebar" aria-label="Personal profile">
+      <img class="profile-photo" src="assets/portrait.jpg" alt="Portrait of ${escape(profile.name)}" width="212" height="274">
+      <div class="profile-details">
+        <p class="profile-name">${escape(profile.name)}</p>
+        <p class="profile-interests">${profile.sidebarInterests.map(s => `<span>${escape(s)}</span>`).join(' <span class="interest-separator" aria-hidden="true">·</span> ')}</p>
+        <div class="profile-meta">
+          <p class="profile-location">${icon('location')}<span>${escape(profile.location)}</span></p>
+          <p class="profile-institution">${icon('university')}<span>${escape(profile.institution)}</span></p>
         </div>
-        <div class="bio-text"><p>${introHTML}</p><p>${escape(profile.research)}</p><p>${escape(profile.vision)}</p></div>
-      </div>
-      <div class="profile-sidebar">
-        <div class="portrait"><img class="profile-photo" src="assets/portrait.jpg" alt="Portrait of ${escape(profile.name)}" width="252" height="326"><div class="photo-caption">${escape(profile.location)}</div></div>
         <div class="profile-links" aria-label="Profile links">
           <a href="mailto:${escape(profile.email)}">${icon('email')}Email</a>
           ${scholarLink}
           ${external(profile.github, 'GitHub', 'github')}
         </div>
       </div>
-    </section>
+    </aside>
+    <main id="main">
+      <section class="about" id="about" aria-labelledby="about-heading">
+        <div class="identity">
+          <p class="eyebrow">${escape(profile.affiliation)}</p>
+          <h1 id="name">${escape(profile.name)}${profile.nameChinese ? ` <span class="chinese-name" lang="zh-CN">${escape(profile.nameChinese)}</span>` : ''}</h1>
+        </div>
+        <h2 id="about-heading">About Me</h2>
+        <div class="bio-text"><p>${introHTML}</p><p>${escape(profile.research)}</p><p>${escape(profile.vision)}</p></div>
+      </section>
     <section class="interests" aria-labelledby="interests-heading"><h2 class="interests-label" id="interests-heading">Research interests</h2>${profile.interests.map(s => `<span class="interest">${escape(s)}</span>`).join('')}</section>
     <section id="publications" aria-labelledby="publications-heading">
       <div class="section-heading"><h2 id="publications-heading">Selected Papers</h2></div>
       ${hasEqual ? '<p class="section-note"><span class="equal-marker">*</span> Equal contribution, unless otherwise noted.</p>' : ''}
       <div class="publications">${papers.map(paperHTML).join('\n        ')}</div>
     </section>
-  </main>
-  <footer class="site-footer"><span>© ${escape(profile.name)}</span><span>${escape(profile.affiliation)} &nbsp;·&nbsp; <a href="${escape(profile.github)}">GitHub</a></span></footer>
+      <footer class="site-footer"><span>© ${escape(profile.name)}</span><span>${escape(profile.affiliation)} &nbsp;·&nbsp; <a href="${escape(profile.github)}">GitHub</a></span></footer>
+    </main>
+  </div>
 </body>
 </html>
 `;
