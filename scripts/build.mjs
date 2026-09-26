@@ -142,7 +142,7 @@ const page = `<!doctype html>
       ${hasEqual ? '<p class="section-note"><span class="equal-marker">*</span> Equal contribution, unless otherwise noted.</p>' : ''}
       <div class="publications">${papers.map(paperHTML).join('\n        ')}</div>
     </section>
-      <footer class="site-footer"><span>© ${escape(profile.name)}</span><span>${escape(profile.affiliation)} &nbsp;·&nbsp; <a href="${escape(profile.github)}">GitHub</a></span></footer>
+      <footer class="site-footer"><span>© ${escape(profile.name)}</span><span>${escape(profile.affiliation)}</span></footer>
     </main>
   </div>
 </body>
